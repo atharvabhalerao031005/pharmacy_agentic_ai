@@ -6,6 +6,7 @@ import axios from 'axios';
 export default function BillingModal({ isOpen, onClose }) {
   const { cart, patient, setCart, setMessages, setRefreshTrigger } = usePharmacy();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [showPaytm, setShowPaytm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const printRef = useRef(null);
@@ -34,6 +35,7 @@ export default function BillingModal({ isOpen, onClose }) {
       const res = await axios.post('http://localhost:8000/finalize-checkout', payload);
 
       setIsSuccess(true);
+      setShowPaytm(false);
       setTimeout(() => {
         setCart([]);
         setRefreshTrigger(prev => prev + 1);
@@ -62,9 +64,14 @@ export default function BillingModal({ isOpen, onClose }) {
           <h2 className="text-2xl font-black text-slate-800 flex items-center gap-2">
             <CreditCard className="text-blue-600" /> Secure Medical Checkout
           </h2>
-          {!isSuccess && (
+          {!isSuccess && !showPaytm && (
             <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
               <X className="text-slate-500" />
+            </button>
+          )}
+          {!isSuccess && showPaytm && (
+            <button onClick={() => setShowPaytm(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+              <span className="text-xs font-bold text-slate-500 mr-2">Back to Cart</span>
             </button>
           )}
         </div>
@@ -176,8 +183,8 @@ export default function BillingModal({ isOpen, onClose }) {
           )}
         </div>
 
-        {/* Footer Actions */}
-        {!isSuccess && (
+        {/* Footer Actions / Paytm Flow */}
+        {!isSuccess && !showPaytm && (
           <div className="p-6 bg-white/30 backdrop-blur-md border-t border-white/60 flex gap-4 print:hidden shrink-0">
             <button
               onClick={handlePrint}
@@ -187,14 +194,35 @@ export default function BillingModal({ isOpen, onClose }) {
               <Download size={18} className="group-hover:-translate-y-1 transition-transform" /> Print Bill
             </button>
             <button
-              onClick={handleConfirm}
+              onClick={() => setShowPaytm(true)}
               disabled={loading || cart.length === 0}
-              className="flex-1 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 active:scale-[0.98] flex justify-center items-center"
+              className="flex-1 px-6 py-4 bg-[#00baf2] hover:bg-[#00a3d4] text-white font-black rounded-2xl transition-all shadow-lg shadow-[#00baf2]/30 disabled:opacity-50 active:scale-[0.98] flex justify-center items-center"
+            >
+              Pay via Paytm
+            </button>
+          </div>
+        )}
+
+        {!isSuccess && showPaytm && (
+          <div className="p-6 bg-sky-50 backdrop-blur-md border-t border-sky-100 print:hidden shrink-0 animate-in slide-in-from-bottom-5">
+            <div className="text-center mb-6">
+              <div className="inline-block bg-white p-4 rounded-3xl shadow-md border border-slate-100">
+                <div className="w-32 h-32 bg-slate-900 mx-auto rounded-xl flex items-center justify-center">
+                  <span className="text-white text-[10px] font-black tracking-widest uppercase opacity-70">Mock QR Code</span>
+                </div>
+              </div>
+              <p className="mt-4 font-bold text-slate-600">Scan to pay <span className="text-slate-900 text-lg">₹{(total * 83).toFixed(0)}</span> via UPI</p>
+            </div>
+
+            <button
+              onClick={handleConfirm}
+              disabled={loading}
+              className="w-full px-6 py-4 bg-slate-900 hover:bg-black text-white font-bold rounded-2xl transition-all shadow-lg disabled:opacity-50 active:scale-[0.98] flex justify-center items-center"
             >
               {loading ? (
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
-                "Pass Security Audit & Confirm"
+                "Bypass Payment (Dev Fast-Track)"
               )}
             </button>
           </div>

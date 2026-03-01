@@ -43,6 +43,16 @@ export default function UserChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isThinking]);
 
+  // Pre-load Web Speech API premium voices
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+  }, []);
+
   // Handle Speech Recognition Setup
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -93,6 +103,23 @@ export default function UserChat() {
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
+
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoices = voices.filter(v =>
+      v.name.includes('Google') ||
+      v.name.includes('Natural') ||
+      v.name.includes('Premium') ||
+      v.name.includes('Microsoft Zira') ||
+      v.name.includes('Microsoft Aria')
+    );
+
+    if (preferredVoices.length > 0) {
+      utterance.voice = preferredVoices[0];
+    } else {
+      const engVoices = voices.filter(v => v.lang.startsWith('en'));
+      if (engVoices.length > 0) utterance.voice = engVoices[0];
+    }
+
     window.speechSynthesis.speak(utterance);
   };
 
@@ -525,11 +552,19 @@ export default function UserChat() {
         onClose={() => setIsUploadOpen(false)}
         medicineName={pendingMedicine}
         userId={patient?.name || "test_user"}
-        onUploadComplete={(filename) => {
+        onUploadComplete={(filename, extractedText) => {
           setIsUploadOpen(false);
           setPatient(prev => ({ ...prev, prescription: filename }));
+          const uploadedMed = pendingMedicine;
           setPendingMedicine(null);
-          handleSend(`[Prescription Uploaded]: I have provided my prescription.`);
+
+          if (uploadedMed) {
+            handleSend(`I have successfully uploaded my prescription for ${uploadedMed}. Please allow me to buy it now.`);
+          } else if (extractedText && extractedText.trim().length > 0) {
+            handleSend(`I just uploaded a prescription. The OCR scanned this text: "${extractedText}". I want to order the medicine mentioned in it.`);
+          } else {
+            handleSend(`I have provided my prescription.`);
+          }
         }}
       />
       <EmergencyOverlay

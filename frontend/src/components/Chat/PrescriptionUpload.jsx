@@ -65,9 +65,10 @@ const PrescriptionUpload = ({ isOpen, onClose, onUploadComplete, medicineName })
       });
 
       if (response.ok) {
+        const result = await response.json();
         setUploadState('success');
         setTimeout(() => {
-          onUploadComplete(file.name);
+          onUploadComplete(file.name, result.extracted_text);
           onClose();
           setFile(null);
           setUploadState('idle');

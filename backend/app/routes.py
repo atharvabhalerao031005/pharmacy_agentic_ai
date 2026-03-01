@@ -7,7 +7,9 @@ import os
 import time
 import uuid
 import base64
+import base64
 from groq import Groq
+import fitz  # PyMuPDF
 
 from pydantic import BaseModel
 from .database import get_db
@@ -422,10 +424,22 @@ async def upload_prescription(
     approved = True
 
     try:
-        if file.content_type in ["image/jpeg", "image/png", "image/jpg"]:
-            b64_img = base64.b64encode(content).decode("utf-8")
+        if file.content_type in ["image/jpeg", "image/png", "image/jpg", "application/pdf"]:
+            if file.content_type == "application/pdf":
+                # Render PDF first page to high-res image
+                doc = fitz.open(file_location)
+                page = doc.load_page(0)
+                pix = page.get_pixmap(matrix=fitz.Matrix(3, 3))
+                img_data = pix.tobytes("png")
+                b64_img = base64.b64encode(img_data).decode("utf-8")
+                mime_type = "image/png"
+                doc.close()
+            else:
+                b64_img = base64.b64encode(content).decode("utf-8")
+                mime_type = file.content_type
+
             client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-            prompt = f"Read the handwritten text in this prescription image. Does it mention {medicine_name}? Extract the relevant text and respond concisely."
+            prompt = f"Read the handwritten text in this prescription document. Does it mention {medicine_name}? Extract the relevant text and respond concisely."
             
             completion = client.chat.completions.create(
                 model="llama-3.2-11b-vision-preview",
@@ -437,7 +451,7 @@ async def upload_prescription(
                             {
                                 "type": "image_url",
                                 "image_url": {
-                                    "url": f"data:{file.content_type};base64,{b64_img}"
+                                    "url": f"data:{mime_type};base64,{b64_img}"
                                 }
                             }
                         ]
