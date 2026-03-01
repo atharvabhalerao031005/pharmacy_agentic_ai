@@ -5,6 +5,7 @@ from .models import Base
 from .routes import router as main_router
 from .admin_routes import router as admin_router
 from .services import import_products_from_excel
+from .models import Medicine
 
 app = FastAPI()
 
@@ -28,8 +29,36 @@ Base.metadata.create_all(bind=engine)
 def root():
     return {"message": "Pharmacy AI running 🚀"}
 
+def seed_dangerous_drugs(db):
+    dangerous_drugs = [
+        {
+            "name": "Oxycodone", 
+            "price": 85.00, 
+            "package_size": "10 mg tablets", 
+            "description": "A potent Schedule II opioid agonist pain medication used to treat moderate to severe pain. Warning: Highly addictive! Explicitly requires a verified doctor's prescription and OCR scanner clearance.", 
+            "stock": 25, 
+            "prescription_required": True, 
+            "max_safe_dosage": 2
+        },
+        {
+            "name": "Adderall", 
+            "price": 120.00, 
+            "package_size": "20 mg capsules", 
+            "description": "Amphetamine-based stimulant used to treat ADHD and narcolepsy. Warning: Controlled substance. Requires a valid handwritten or digital prescription before dispensing.", 
+            "stock": 10, 
+            "prescription_required": True, 
+            "max_safe_dosage": 2
+        }   
+    ]
+    for d in dangerous_drugs:
+        if not db.query(Medicine).filter(Medicine.name == d["name"]).first():
+            med = Medicine(**d)
+            db.add(med)
+    db.commit()
+
 @app.on_event("startup")
 def startup_event():
     db = SessionLocal()
     import_products_from_excel(db)
+    seed_dangerous_drugs(db)
     db.close()

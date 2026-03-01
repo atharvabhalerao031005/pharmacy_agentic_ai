@@ -58,11 +58,27 @@ def import_products_from_excel(db: Session):
         ).first()
 
         if not exists:
+            med_name = row["product name"].strip()
+            
+            # Auto-generate dynamic descriptions if none exist in the excel sheet
+            desc = row.get("descriptions", "")
+            if pd.isna(desc) or not desc.strip():
+                if "panadol" in med_name.lower() or "paracetamol" in med_name.lower():
+                    desc = "Fast-acting pain relief and fever reducer. Ideal for headaches, muscle aches, and common colds."
+                elif "brufen" in med_name.lower() or "ibuprofen" in med_name.lower():
+                    desc = "Anti-inflammatory medication used for reducing fever and treating pain or inflammation."
+                elif "cough" in med_name.lower():
+                    desc = "Soothing syrup that relieves persistent dry and chesty coughs."
+                elif "vitamin" in med_name.lower():
+                    desc = "Daily nutritional supplement to boost your immune system and overall health."
+                else:
+                    desc = "Standard medical supply. Always read the label and follow usage instructions carefully."
+
             med = Medicine(
-                name=row["product name"],
+                name=med_name,
                 price=float(row.get("price rec", 0)),
                 package_size=row.get("package size", ""),
-                description=row.get("descriptions", ""),
+                description=desc,
 
                 # Mock values (since Excel doesn’t have these)
                 stock=50,

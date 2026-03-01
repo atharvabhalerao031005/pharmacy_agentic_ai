@@ -5,6 +5,7 @@ const PrescriptionUpload = ({ isOpen, onClose, onUploadComplete, medicineName })
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState(null);
   const [uploadState, setUploadState] = useState('idle'); // idle, uploading, success, error
+  const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef(null);
 
   if (!isOpen) return null;
@@ -24,8 +25,10 @@ const PrescriptionUpload = ({ isOpen, onClose, onUploadComplete, medicineName })
     if (selectedFile && (validTypes.includes(selectedFile.type) || isExtensionValid)) {
       setFile(selectedFile);
       setUploadState('idle');
+      setErrorMessage('');
     } else {
       setFile(null);
+      setErrorMessage('Invalid file format. Please upload a PDF, JPG, or PNG.');
       setUploadState('error');
     }
   };
@@ -74,10 +77,13 @@ const PrescriptionUpload = ({ isOpen, onClose, onUploadComplete, medicineName })
           setUploadState('idle');
         }, 1500);
       } else {
+        const errData = await response.json();
+        setErrorMessage(errData.detail || 'Upload failed.');
         setUploadState('error');
       }
     } catch (err) {
       console.error(err);
+      setErrorMessage('Network error occurred connecting to OCR Engine.');
       setUploadState('error');
     }
   };
@@ -125,8 +131,8 @@ const PrescriptionUpload = ({ isOpen, onClose, onUploadComplete, medicineName })
 
             {/* Error Message */}
             {uploadState === 'error' && (
-              <div className="flex items-center gap-2 mt-4 p-3 bg-rose-50 text-rose-600 rounded-xl text-xs font-bold border border-rose-100">
-                <AlertCircle size={16} /> Invalid file format. Please upload a PDF or Image.
+              <div className="flex items-start gap-2 mt-4 p-3 bg-rose-50 text-rose-600 rounded-xl text-xs font-bold border border-rose-100 text-left">
+                <AlertCircle size={16} className="shrink-0 mt-0.5" /> <span>{errorMessage}</span>
               </div>
             )}
 

@@ -109,7 +109,7 @@ const ProductGrid = ({ searchQuery, activeCategory, products = [] }) => {
               </div>
 
               <h3 className="text-lg font-bold text-slate-800 tracking-tight">{product.name}</h3>
-              <p className="text-sm text-slate-500 mt-1 mb-4 line-clamp-2">{product.description || 'No description available.'}</p>
+              <p className="text-sm text-slate-500 mt-1 mb-4 line-clamp-4 leading-relaxed">{product.description || 'No description available.'}</p>
 
               <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-200/50 gap-4">
                 <span className="text-xl font-extrabold text-slate-800">${(product.price || 0).toFixed(2)}</span>
@@ -161,8 +161,9 @@ const ProductGrid = ({ searchQuery, activeCategory, products = [] }) => {
         onClose={() => setRxModalProduct(null)}
         medicineName={rxModalProduct?.name}
         userId={patient?.id || patient?.email || "Unknown"}
-        onUploadComplete={(filename) => {
+        onUploadComplete={(filename, extractedText) => {
           if (rxModalProduct) {
+            window.alert(`✅ Prescription explicitly Verified & Approved via OCR scanning!\n\n${rxModalProduct.name} has been authorized and securely added to your cart.`);
             handleAddToCartClick(rxModalProduct);
           }
           setRxModalProduct(null);
