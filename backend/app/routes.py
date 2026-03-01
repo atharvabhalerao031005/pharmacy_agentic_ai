@@ -423,53 +423,54 @@ async def upload_prescription(
     extracted_text = ""
     approved = True
 
+    import requests
     try:
         if file.content_type in ["image/jpeg", "image/png", "image/jpg", "application/pdf"]:
-            if file.content_type == "application/pdf":
-                # Render PDF first page to high-res image
-                doc = fitz.open(file_location)
-                page = doc.load_page(0)
-                pix = page.get_pixmap(matrix=fitz.Matrix(3, 3))
-                img_data = pix.tobytes("png")
-                b64_img = base64.b64encode(img_data).decode("utf-8")
-                mime_type = "image/png"
-                doc.close()
-            else:
-                b64_img = base64.b64encode(content).decode("utf-8")
-                mime_type = file.content_type
+            # 1. Extract Text using OCR Space Engine 2 (Highly Trained Handwritten OCR)
+            with open(file_location, 'rb') as f:
+                r = requests.post(
+                    'https://api.ocr.space/parse/image',
+                    files={'file': f},
+                    data={
+                        'apikey': 'helloworld',
+                        'language': 'eng',
+                        'OCREngine': '2',
+                        'scale': 'true'
+                    }
+                )
+            ocr_result = r.json()
+            
+            if ocr_result.get("IsErroredOnProcessing"):
+                raise Exception(f"OCR Parsing Error: {ocr_result.get('ErrorMessage')}")
+                
+            parsed_results = ocr_result.get("ParsedResults", [])
+            extracted_text = "\n".join([p.get("ParsedText", "") for p in parsed_results]).strip()
+            
+            if not extracted_text:
+                raise Exception("No text could be extracted from this image/pdf.")
 
+            # 2. Semantic Verification using Llama 3 8B Text Model
             client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-            prompt = f"Perform high-accuracy OCR on this medical prescription. Extract all handwritten text explicitly word-for-word. Does it prescribe '{medicine_name}'? Reply with the exact extracted text only. Do not hallucinate."
+            prompt = f"You are a medical verification system. I have extracted the following raw OCR text from a medical prescription:\n\n\"{extracted_text}\"\n\nDoes this prescription explicitly prescribe or mention the medicine: '{medicine_name}'? Please account for slight OCR misspellings. Answer ONLY with 'YES' or 'NO'."
             
             completion = client.chat.completions.create(
-                model="llama-3.2-90b-vision-preview",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": prompt},
-                            {
-                                "type": "image_url",
-                                "image_url": {
-                                    "url": f"data:{mime_type};base64,{b64_img}"
-                                }
-                            }
-                        ]
-                    }
-                ],
+                model="llama-3.1-8b-instant",
+                messages=[{"role": "user", "content": prompt}],
                 temperature=0.1,
-                max_tokens=200
+                max_tokens=10
             )
-            extracted_text = completion.choices[0].message.content
-            # Verify if medicine is in the extracted text
-            if medicine_name != "Unknown" and medicine_name.lower() not in extracted_text.lower():
+            
+            ai_decision = completion.choices[0].message.content.strip().upper()
+            
+            if "YES" not in ai_decision and medicine_name != "Unknown":
                 approved = False  # Strictly reject if not found
-                print(f"Rx Check Failed: '{medicine_name}' not found in OCR text: {extracted_text}")
+                print(f"Rx Check Failed: '{medicine_name}' rejected by LLM based on OCR text: {extracted_text}")
             else:
                 approved = True
                 print(f"Rx Check Passed or Generic Upload.")
     except Exception as e:
         print("OCR Vision Error:", e)
+        raise HTTPException(status_code=400, detail=f"OCR Engine Error: {str(e)}")
 
     prescription = Prescription(
         patient_id=user_id,
