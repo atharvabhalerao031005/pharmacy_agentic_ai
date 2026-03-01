@@ -57,23 +57,29 @@ def import_products_from_excel(db: Session):
             Medicine.name == row["product name"]
         ).first()
 
-        if not exists:
-            med_name = row["product name"].strip()
-            
-            # Auto-generate dynamic descriptions if none exist in the excel sheet
-            desc = row.get("descriptions", "")
-            if pd.isna(desc) or not desc.strip():
-                if "panadol" in med_name.lower() or "paracetamol" in med_name.lower():
-                    desc = "Fast-acting pain relief and fever reducer. Ideal for headaches, muscle aches, and common colds."
-                elif "brufen" in med_name.lower() or "ibuprofen" in med_name.lower():
-                    desc = "Anti-inflammatory medication used for reducing fever and treating pain or inflammation."
-                elif "cough" in med_name.lower():
-                    desc = "Soothing syrup that relieves persistent dry and chesty coughs."
-                elif "vitamin" in med_name.lower():
-                    desc = "Daily nutritional supplement to boost your immune system and overall health."
-                else:
-                    desc = "Standard medical supply. Always read the label and follow usage instructions carefully."
+        med_name = row["product name"].strip()
+        
+        # Auto-generate dynamic descriptions if none exist in the excel sheet
+        desc = row.get("descriptions", "")
+        if pd.isna(desc) or not str(desc).strip() or str(desc).strip().lower() == "nan":
+            if "panadol" in med_name.lower() or "paracetamol" in med_name.lower():
+                desc = "Fast-acting pain relief and fever reducer. Ideal for headaches, muscle aches, and common colds."
+            elif "brufen" in med_name.lower() or "ibuprofen" in med_name.lower():
+                desc = "Anti-inflammatory medication used for reducing fever and treating pain or inflammation."
+            elif "cough" in med_name.lower():
+                desc = "Soothing syrup that relieves persistent dry and chesty coughs."
+            elif "vitamin" in med_name.lower() or "omega" in med_name.lower() or "norsan" in med_name.lower():
+                desc = "Premium daily nutritional supplement to boost your immune system, heart health, and overall well-being."
+            elif "augentropfen" in med_name.lower() or "eye" in med_name.lower() or "vividrin" in med_name.lower():
+                desc = "Soothing eye drops for fast relief from dryness, redness, and allergic irritation."
+            elif "aqualibra" in med_name.lower():
+                desc = "Herbal medicine traditionally used for the flushing through of inflammatory diseases of the lower urinary tract."
+            elif "panthenol" in med_name.lower() or "spray" in med_name.lower():
+                desc = "Cooling and soothing spray for the treatment of superficial skin damage, mild burns, and sunburn."
+            else:
+                desc = "High-quality medical supply. Always read the label and follow usage instructions carefully before use."
 
+        if not exists:
             med = Medicine(
                 name=med_name,
                 price=float(row.get("price rec", 0)),
@@ -85,6 +91,10 @@ def import_products_from_excel(db: Session):
                 prescription_required=False
             )
             db.add(med)
+        else:
+            # Backfill existing empty descriptions!
+            if not exists.description or str(exists.description).strip() == "" or str(exists.description).lower() == "nan" or "Standard medical supply" in exists.description:
+                exists.description = desc
 
     db.commit()
 
