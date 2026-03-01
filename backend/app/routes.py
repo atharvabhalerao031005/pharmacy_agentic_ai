@@ -439,10 +439,10 @@ async def upload_prescription(
                 mime_type = file.content_type
 
             client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-            prompt = f"Read the handwritten text in this prescription document. Does it mention {medicine_name}? Extract the relevant text and respond concisely."
+            prompt = f"Perform high-accuracy OCR on this medical prescription. Extract all handwritten text explicitly word-for-word. Does it prescribe '{medicine_name}'? Reply with the exact extracted text only. Do not hallucinate."
             
             completion = client.chat.completions.create(
-                model="llama-3.2-11b-vision-preview",
+                model="llama-3.2-90b-vision-preview",
                 messages=[
                     {
                         "role": "user",
