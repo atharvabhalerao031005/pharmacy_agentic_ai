@@ -1,0 +1,412 @@
+{
+  "ParsedResults": [
+    {
+      "TextOverlay": {
+        "Lines": [
+          {
+            "LineText": "3. Porte Prat",
+            "Words": [
+              {
+                "WordText": "3",
+                "Left": 927.0,
+                "Top": 761.0,
+                "Height": 87.0,
+                "Width": 76.0
+              },
+              {
+                "WordText": ".",
+                "Left": 927.0,
+                "Top": 761.0,
+                "Height": 87.0,
+                "Width": 76.0
+              },
+              {
+                "WordText": "Porte",
+                "Left": 1014.0,
+                "Top": 761.0,
+                "Height": 88.0,
+                "Width": 250.0
+              },
+              {
+                "WordText": "Prat",
+                "Left": 1275.0,
+                "Top": 762.0,
+                "Height": 88.0,
+                "Width": 210.0
+              }
+            ],
+            "MaxHeight": 89.0,
+            "MinTop": 761.0
+          },
+          {
+            "LineText": "Rfr.I-33917-E",
+            "Words": [
+              {
+                "WordText": "Rfr.I",
+                "Left": 921.0,
+                "Top": 899.0,
+                "Height": 62.0,
+                "Width": 249.0
+              },
+              {
+                "WordText": "-",
+                "Left": 921.0,
+                "Top": 899.0,
+                "Height": 62.0,
+                "Width": 249.0
+              },
+              {
+                "WordText": "33917",
+                "Left": 921.0,
+                "Top": 899.0,
+                "Height": 62.0,
+                "Width": 249.0
+              },
+              {
+                "WordText": "-",
+                "Left": 921.0,
+                "Top": 899.0,
+                "Height": 62.0,
+                "Width": 249.0
+              },
+              {
+                "WordText": "E",
+                "Left": 921.0,
+                "Top": 899.0,
+                "Height": 62.0,
+                "Width": 249.0
+              }
+            ],
+            "MaxHeight": 62.0,
+            "MinTop": 899.0
+          },
+          {
+            "LineText": "Rfr #.1-84214-A",
+            "Words": [
+              {
+                "WordText": "Rfr",
+                "Left": 1812.0,
+                "Top": 893.0,
+                "Height": 51.0,
+                "Width": 71.0
+              },
+              {
+                "WordText": "#.",
+                "Left": 1888.0,
+                "Top": 893.0,
+                "Height": 51.0,
+                "Width": 209.0
+              },
+              {
+                "WordText": "1",
+                "Left": 1889.0,
+                "Top": 893.0,
+                "Height": 51.0,
+                "Width": 209.0
+              },
+              {
+                "WordText": "-",
+                "Left": 1889.0,
+                "Top": 893.0,
+                "Height": 51.0,
+                "Width": 209.0
+              },
+              {
+                "WordText": "84214",
+                "Left": 1888.0,
+                "Top": 893.0,
+                "Height": 51.0,
+                "Width": 209.0
+              },
+              {
+                "WordText": "-",
+                "Left": 1889.0,
+                "Top": 893.0,
+                "Height": 51.0,
+                "Width": 209.0
+              },
+              {
+                "WordText": "A",
+                "Left": 1889.0,
+                "Top": 893.0,
+                "Height": 51.0,
+                "Width": 209.0
+              }
+            ],
+            "MaxHeight": 51.0,
+            "MinTop": 893.0
+          },
+          {
+            "LineText": "R: 24/2/026",
+            "Words": [
+              {
+                "WordText": "R",
+                "Left": 1673.0,
+                "Top": 1042.0,
+                "Height": 71.0,
+                "Width": 71.0
+              },
+              {
+                "WordText": ":",
+                "Left": 1673.0,
+                "Top": 1042.0,
+                "Height": 71.0,
+                "Width": 71.0
+              },
+              {
+                "WordText": "24",
+                "Left": 1753.0,
+                "Top": 1042.0,
+                "Height": 71.0,
+                "Width": 341.0
+              },
+              {
+                "WordText": "/",
+                "Left": 1753.0,
+                "Top": 1042.0,
+                "Height": 71.0,
+                "Width": 341.0
+              },
+              {
+                "WordText": "2",
+                "Left": 1753.0,
+                "Top": 1042.0,
+                "Height": 71.0,
+                "Width": 341.0
+              },
+              {
+                "WordText": "/",
+                "Left": 1753.0,
+                "Top": 1042.0,
+                "Height": 71.0,
+                "Width": 341.0
+              },
+              {
+                "WordText": "026",
+                "Left": 1753.0,
+                "Top": 1042.0,
+                "Height": 71.0,
+                "Width": 341.0
+              }
+            ],
+            "MaxHeight": 71.0,
+            "MinTop": 1042.0
+          },
+          {
+            "LineText": "R",
+            "Words": [
+              {
+                "WordText": "R",
+                "Left": 434.0,
+                "Top": 1168.0,
+                "Height": 71.0,
+                "Width": 87.0
+              }
+            ],
+            "MaxHeight": 71.0,
+            "MinTop": 1168.0
+          },
+          {
+            "LineText": "7-",
+            "Words": [
+              {
+                "WordText": "7",
+                "Left": 577.0,
+                "Top": 1250.0,
+                "Height": 92.0,
+                "Width": 112.0
+              },
+              {
+                "WordText": "-",
+                "Left": 577.0,
+                "Top": 1250.0,
+                "Height": 92.0,
+                "Width": 112.0
+              }
+            ],
+            "MaxHeight": 92.0,
+            "MinTop": 1250.0
+          },
+          {
+            "LineText": "fex. Allegra 120 e)",
+            "Words": [
+              {
+                "WordText": "fex",
+                "Left": 827.0,
+                "Top": 1266.0,
+                "Height": 132.0,
+                "Width": 235.0
+              },
+              {
+                "WordText": ".",
+                "Left": 827.0,
+                "Top": 1266.0,
+                "Height": 132.0,
+                "Width": 235.0
+              },
+              {
+                "WordText": "Allegra",
+                "Left": 1073.0,
+                "Top": 1275.0,
+                "Height": 133.0,
+                "Width": 281.0
+              },
+              {
+                "WordText": "120",
+                "Left": 1365.0,
+                "Top": 1286.0,
+                "Height": 131.0,
+                "Width": 220.0
+              },
+              {
+                "WordText": "e",
+                "Left": 1595.0,
+                "Top": 1295.0,
+                "Height": 131.0,
+                "Width": 202.0
+              },
+              {
+                "WordText": ")",
+                "Left": 1595.0,
+                "Top": 1295.0,
+                "Height": 131.0,
+                "Width": 202.0
+              }
+            ],
+            "MaxHeight": 160.0,
+            "MinTop": 1266.0
+          },
+          {
+            "LineText": "aysrone",
+            "Words": [
+              {
+                "WordText": "aysrone",
+                "Left": 1031.0,
+                "Top": 1459.0,
+                "Height": 143.0,
+                "Width": 388.0
+              }
+            ],
+            "MaxHeight": 143.0,
+            "MinTop": 1459.0
+          },
+          {
+            "LineText": "pacimo eso o.",
+            "Words": [
+              {
+                "WordText": "pacimo",
+                "Left": 1036.0,
+                "Top": 1638.0,
+                "Height": 161.0,
+                "Width": 302.0
+              },
+              {
+                "WordText": "eso",
+                "Left": 1358.0,
+                "Top": 1638.0,
+                "Height": 161.0,
+                "Width": 221.0
+              },
+              {
+                "WordText": "o",
+                "Left": 1600.0,
+                "Top": 1638.0,
+                "Height": 161.0,
+                "Width": 180.0
+              },
+              {
+                "WordText": ".",
+                "Left": 1600.0,
+                "Top": 1638.0,
+                "Height": 161.0,
+                "Width": 180.0
+              }
+            ],
+            "MaxHeight": 161.0,
+            "MinTop": 1638.0
+          },
+          {
+            "LineText": "M980",
+            "Words": [
+              {
+                "WordText": "M980",
+                "Left": 418.0,
+                "Top": 3040.0,
+                "Height": 66.0,
+                "Width": 265.0
+              }
+            ],
+            "MaxHeight": 66.0,
+            "MinTop": 3040.0
+          },
+          {
+            "LineText": "TOHO",
+            "Words": [
+              {
+                "WordText": "TOHO",
+                "Left": 500.0,
+                "Top": 3121.0,
+                "Height": 56.0,
+                "Width": 214.0
+              }
+            ],
+            "MaxHeight": 56.0,
+            "MinTop": 3121.0
+          },
+          {
+            "LineText": "Dere",
+            "Words": [
+              {
+                "WordText": "Dere",
+                "Left": 531.0,
+                "Top": 3177.0,
+                "Height": 56.0,
+                "Width": 168.0
+              }
+            ],
+            "MaxHeight": 56.0,
+            "MinTop": 3177.0
+          },
+          {
+            "LineText": "cobro",
+            "Words": [
+              {
+                "WordText": "cobro",
+                "Left": 541.0,
+                "Top": 3244.0,
+                "Height": 46.0,
+                "Width": 194.0
+              }
+            ],
+            "MaxHeight": 46.0,
+            "MinTop": 3244.0
+          },
+          {
+            "LineText": "caervit",
+            "Words": [
+              {
+                "WordText": "caervit",
+                "Left": 582.0,
+                "Top": 3274.0,
+                "Height": 66.0,
+                "Width": 352.0
+              }
+            ],
+            "MaxHeight": 66.0,
+            "MinTop": 3274.0
+          }
+        ],
+        "HasOverlay": true
+      },
+      "TextOrientation": "0",
+      "FileParseExitCode": 1,
+      "ParsedText": "3. Porte Prat\nRfr.I-33917-E\nRfr #.1-84214-A\nR: 24/2/026\nR\n7-\nfex. Allegra 120 e)\naysrone\npacimo eso o.\nM980\nTOHO\nDere\ncobro\ncaervit",
+      "ErrorMessage": "",
+      "ErrorDetails": ""
+    }
+  ],
+  "OCRExitCode": 1,
+  "IsErroredOnProcessing": false,
+  "ProcessingTimeInMilliseconds": "937",
+  "SearchablePDFURL": "Searchable PDF not generated as it was not requested."
+}

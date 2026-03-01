@@ -216,6 +216,7 @@ class CartItem(BaseModel):
 
 class CheckoutRequest(BaseModel):
     patient_id: str
+    phone: Optional[str] = None
     items: List[CartItem]
 
 @router.post("/finalize-checkout")
@@ -274,9 +275,43 @@ def finalize_checkout(data: CheckoutRequest, db: Session = Depends(get_db)):
 
     db.commit()
 
+    # 6️⃣ Send WhatsApp Confirmation if phone provided
+    whatsapp_status = "Skipped"
+    if data.phone and len(data.phone.strip()) > 5:
+        import urllib.parse
+        try:
+            # We use an open/free WhatsApp messaging API for dev demonstrations
+            # CallMeBot allows sending messages by sending a simple GET request
+            clean_phone = "".join(c for c in data.phone if c.isdigit() or c == "+")
+            if not clean_phone.startswith("+"):
+                clean_phone = "+" + clean_phone 
+                
+            item_list_str = "\\n".join([f"- {i.quantity}x {i.name}" for i in data.items])
+            total_items = sum(i.quantity for i in data.items)
+            msg = f"*PharmaAgent: Order Confirmed!* ✅\\n\\nYour prescription order for {total_items} items has been successfully processed and audited.\\n\\n*Items:*\\n{item_list_str}\\n\\nThanks for using PharmaAgent!"
+            
+            # Use Ultramsg / CallMeBot or generic free API form
+            # Because this is a hackathon/demo, we use an open HTTP WhatsApp gateway simulator if an actual twilio/meta key isn't provided
+            # Using CallMeBot developer API as a placeholder trigger
+            encoded_msg = urllib.parse.quote(msg)
+            
+            # NOTE: For CallMeBot to work, the user needs to get their free API key from the bot, 
+            # so we'll simulate the successful HTTP request logic here.
+            wa_url = f"https://api.callmebot.com/whatsapp.php?phone={clean_phone}&text={encoded_msg}&apikey=YOUR_API_KEY"
+            
+            # Fire and forget (in a real app, use celery/background tasks)
+            requests.get(wa_url, timeout=3)
+            whatsapp_status = "Attempted"
+            print(f"✅ WhatsApp Confirmation triggered for {clean_phone}")
+            
+        except Exception as e:
+            print("WhatsApp Integration Error:", e)
+            whatsapp_status = f"Failed: {str(e)}"
+
     return {
         "status": "success",
-        "message": "Checkout completed safely"
+        "message": "Checkout completed safely",
+        "whatsapp_status": whatsapp_status
     }
 
 

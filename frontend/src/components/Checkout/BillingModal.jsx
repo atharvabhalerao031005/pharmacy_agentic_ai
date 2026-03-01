@@ -9,6 +9,7 @@ export default function BillingModal({ isOpen, onClose }) {
   const [showPaytm, setShowPaytm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [phone, setPhone] = useState('');
   const printRef = useRef(null);
 
   if (!isOpen) return null;
@@ -25,6 +26,7 @@ export default function BillingModal({ isOpen, onClose }) {
     try {
       const payload = {
         patient_id: patient?.id || "unknown",
+        phone: phone, // Pass the phone number to backend
         items: cart.map(item => ({
           name: item.name,
           quantity: item.quantity || 1,
@@ -208,10 +210,21 @@ export default function BillingModal({ isOpen, onClose }) {
             <div className="text-center mb-6">
               <div className="inline-block bg-white p-4 rounded-3xl shadow-md border border-slate-100">
                 <div className="w-32 h-32 bg-slate-900 mx-auto rounded-xl flex items-center justify-center">
-                  <span className="text-white text-[10px] font-black tracking-widest uppercase opacity-70">Mock QR Code</span>
+                  <span className="text-white text-[10px] font-black tracking-widest uppercase opacity-70">Mock QR</span>
                 </div>
               </div>
               <p className="mt-4 font-bold text-slate-600">Scan to pay <span className="text-slate-900 text-lg">₹{(total * 83).toFixed(0)}</span> via UPI</p>
+            </div>
+
+            <div className="mb-6 flex flex-col gap-2">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider ml-2">WhatsApp Order Confirmation (Optional)</label>
+              <input
+                type="tel"
+                placeholder="+1234567890 (International Format)"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full px-5 py-4 rounded-2xl border-none outline-none ring-2 ring-transparent focus:ring-sky-500 bg-white/60 shadow-inner text-slate-800 font-bold placeholder:text-slate-400 placeholder:font-medium transition-all"
+              />
             </div>
 
             <button
